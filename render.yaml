@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: myprofile-portfolio
+    runtime: python
+    buildCommand: ""
+    startCommand: python server.py
+    plan: free
+    envVars:
+      - key: NEON_API_KEY
+        sync: false
+      - key: NEON_PROJECT_ID
+        sync: false
+      - key: ADMIN_PASSCODE
+        sync: false
