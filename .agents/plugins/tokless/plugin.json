@@ -1,0 +1,5 @@
+{
+  "name": "tokless",
+  "version": "1.0.0",
+  "description": "Token optimization and concise context pruning plugin for Antigravity"
+}

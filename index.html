@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Karumanchi Raghu Ram | Computer Science Engineer</title>
+  <meta name="description" content="Portfolio of Karumanchi Raghu Ram, B.Tech Computer Science student at NBKRIST. Expertise in C, C++, Frontend development, and analytical problem-solving.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Navigation Header -->
+  <header class="site-header" id="site-header">
+    <div class="header-container">
+      <a href="#hero-scroll" class="brand-badge" id="brand-badge">
+        <span class="brand-monogram">KR</span>
+        <span class="brand-meta">
+          <strong class="brand-name">Karumanchi Raghu Ram</strong>
+          <span class="brand-role">CS Undergrad • NBKRIST</span>
+        </span>
+      </a>
+
+      <nav class="nav-links" id="main-navigation" aria-label="Main Navigation">
+        <a href="#about" class="nav-link">About</a>
+        <a href="#education" class="nav-link">Education</a>
+        <a href="#skills" class="nav-link">Skills</a>
+        <a href="#achievements" class="nav-link">Certifications</a>
+        <a href="#strategy" class="nav-link">Chess & Mindset</a>
+      </nav>
+
+      <div class="header-actions">
+        <a href="mailto:ram392473@gmail.com" class="btn btn-secondary btn-sm" id="header-email-btn">
+          <span class="btn-icon">✉</span> ram392473@gmail.com
+        </a>
+        <a href="#contact" class="btn btn-primary btn-sm" id="header-contact-btn">Get In Touch</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Cinematic Scroll-Scrubbed Zero-G Chess Intro -->
+    <div class="hero-scroll-container" id="hero-scroll">
+      <div class="hero-sticky-frame">
+        <canvas id="chess-intro-canvas" class="hero-canvas"></canvas>
+        <div class="hero-canvas-vignette"></div>
+
+        <div class="hero-overlay-hud">
+          <!-- Phase 1: Zero-G Sequence Intro (0% to ~28%) -->
+          <div class="hero-phase active" id="hero-phase-1">
+            <div class="hero-loader-pill" id="hero-loader-badge">
+              <span class="hero-loader-dot"></span>
+              <span id="hero-loader-text">Loading Zero-G Strategy: 1%</span>
+            </div>
+            <h1 class="hero-phase-title">
+              Calculated Strategy in Motion.
+            </h1>
+            <p class="hero-phase-lead">
+              Every move deliberate. Every line engineered. Scroll down to initiate zero-gravity simulation.
+            </p>
+          </div>
+
+          <!-- Phase 2: Candidate Headline (32% to ~65%) -->
+          <div class="hero-phase" id="hero-phase-2">
+            <div class="hero-loader-pill" style="border-color: rgba(229, 169, 80, 0.45); margin-bottom: 1.25rem;">
+              <span class="status-indicator"></span>
+              <span>Available for Engineering Roles & Internships</span>
+            </div>
+            <h2 class="hero-phase-title" style="font-size: clamp(2.2rem, 5vw, 3.8rem);">
+              Karumanchi Raghu Ram
+            </h2>
+            <p class="hero-phase-lead">
+              Computer Science & Engineering at <strong>NBKRIST</strong> • <strong>8.2 CGPA</strong><br>
+              Bridging foundational systems logic with responsive, high-craft web engineering.
+            </p>
+            <div class="hero-actions" style="margin-bottom: 0;">
+              <a href="#hero" class="btn btn-primary" id="scroll-explore-btn">Explore Portfolio ↓</a>
+              <a href="#contact" class="btn btn-secondary">Get In Touch</a>
+            </div>
+          </div>
+
+          <!-- Phase 3: Transition Prompt (70% to 100%) -->
+          <div class="hero-phase" id="hero-phase-3">
+            <div class="hero-loader-pill" style="border-color: rgba(74, 222, 128, 0.45);">
+              <span class="hero-loader-dot" style="background: var(--accent-emerald); box-shadow: 0 0 8px var(--accent-emerald);"></span>
+              <span>Position Secured • Checkmate Achieved</span>
+            </div>
+            <h2 class="hero-phase-title" style="font-size: clamp(2rem, 4.5vw, 3.2rem);">
+              From Board Vision to Production Code
+            </h2>
+            <p class="hero-phase-lead">
+              Scroll down to inspect academic credentials, systems projects, and technical skills.
+            </p>
+          </div>
+        </div>
+
+        <!-- Bottom Scroll Cue -->
+        <div class="hero-scroll-cue" id="hero-scroll-cue">
+          <div class="scroll-cue-mouse">
+            <div class="scroll-cue-wheel"></div>
+          </div>
+          <span>Scroll to scrub</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero / Summary Section -->
+    <section class="section hero-section" id="hero">
+      <div class="content-container">
+        <div class="hero-status-pill reveal-block reveal-up">
+          <span class="status-indicator"></span>
+          <span>Available for Engineering Roles & Internships</span>
+        </div>
+
+        <h1 class="hero-title reveal-block reveal-left">
+          Building resilient software with <span class="text-highlight">rigorous logic</span> and precise web craft.
+        </h1>
+
+        <p class="hero-lead reveal-block reveal-left stagger-1">
+          I'm <strong>Karumanchi Raghu Ram</strong>, a Computer Science & Engineering undergraduate at NBKRIST with an <strong>8.2 CGPA</strong>. I combine foundational systems thinking in C/C++ with modern frontend development and structured, analytical problem-solving.
+        </p>
+
+        <div class="hero-actions reveal-block reveal-up stagger-2">
+          <a href="#contact" class="btn btn-primary" id="hero-connect-btn">Contact Me</a>
+          <button class="btn btn-secondary" id="copy-email-btn" onclick="copyText('ram392473@gmail.com', 'copy-email-btn')">
+            <span class="btn-icon">📋</span> Copy Email
+          </button>
+          <a href="tel:+918099901954" class="btn btn-secondary" id="hero-phone-btn">
+            <span class="btn-icon">📞</span> +91 8099901954
+          </a>
+        </div>
+
+        <!-- Quick Metrics Grid with GitHub-style reveals -->
+        <div class="metric-ribbon">
+          <div class="metric-card reveal-block reveal-left stagger-1">
+            <span class="metric-num">8.2</span>
+            <span class="metric-label">Current CGPA (B.Tech CSE)</span>
+          </div>
+          <div class="metric-card reveal-block reveal-left stagger-2">
+            <span class="metric-num">93%</span>
+            <span class="metric-label">Intermediate MPC (2024)</span>
+          </div>
+          <div class="metric-card reveal-block reveal-right stagger-3">
+            <span class="metric-num">3+</span>
+            <span class="metric-label">Core Tech Focus Areas</span>
+          </div>
+          <div class="metric-card reveal-block reveal-right stagger-4">
+            <span class="metric-num">3</span>
+            <span class="metric-label">Spoken Languages</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About & Career Objective -->
+    <section class="section" id="about">
+      <div class="content-container">
+        <div class="section-header reveal-block reveal-up">
+          <h2 class="section-title">Career Objective & Background</h2>
+          <p class="section-subtitle">Dedicated to applying engineering rigour to solve real-world problems.</p>
+        </div>
+
+        <div class="about-grid">
+          <div class="objective-card reveal-block reveal-left">
+            <h3 class="card-title">Objective</h3>
+            <p class="objective-quote">
+              "To leverage my technical skills in Computer Science and Engineering to contribute to innovative projects in a dynamic and growth-oriented environment, while continually expanding my expertise in software development and problem-solving."
+            </p>
+            <div class="qualities-wrap">
+              <span class="quality-tag">Organized & Punctual</span>
+              <span class="quality-tag">Smart Working</span>
+              <span class="quality-tag">Time Management</span>
+              <span class="quality-tag">Analytical Thinker</span>
+            </div>
+          </div>
+
+          <div class="personal-details-card reveal-block reveal-right">
+            <h3 class="card-title">Profile Snapshot</h3>
+            <ul class="detail-list">
+              <li>
+                <span class="detail-name">Location:</span>
+                <span class="detail-val">Sanjiv Gandhi Nagar, Nellore, Andhra Pradesh</span>
+              </li>
+              <li>
+                <span class="detail-name">Languages:</span>
+                <span class="detail-val">Telugu (Native), Hindi, English</span>
+              </li>
+              <li>
+                <span class="detail-name">Interests:</span>
+                <span class="detail-val">Computer Programming, Book Reading, Chess Tactics</span>
+              </li>
+              <li>
+                <span class="detail-name">Institutional Affiliation:</span>
+                <span class="detail-val">NBKRIST, Vidyanagar (Autonomous)</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Education Timeline -->
+    <section class="section section-dim" id="education">
+      <div class="content-container">
+        <div class="section-header reveal-block reveal-up">
+          <h2 class="section-title">Educational Milestones</h2>
+          <p class="section-subtitle">Consistent academic discipline across collegiate and foundational schooling.</p>
+        </div>
+
+        <div class="timeline">
+          <div class="timeline-item current reveal-block reveal-left">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <div class="timeline-meta">
+                <span class="badge badge-accent">Present / Ongoing</span>
+                <span class="timeline-grade">Score: 8.2 CGPA</span>
+              </div>
+              <h3 class="timeline-title">B-Tech in Computer Science and Engineering</h3>
+              <p class="timeline-org">NBKR Institute of Science & Technology (NBKRIST), Vidyanagar</p>
+              <p class="timeline-desc">
+                Autonomous institution. Rigorous curriculum concentrating on core algorithms, object-oriented concepts, system architectures, database systems, and web technologies.
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-item reveal-block reveal-right">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <div class="timeline-meta">
+                <span class="badge">Completed 2024</span>
+                <span class="timeline-grade">Score: 93.0%</span>
+              </div>
+              <h3 class="timeline-title">Intermediate (MPC - Mathematics, Physics, Chemistry)</h3>
+              <p class="timeline-org">Narayana Junior College</p>
+              <p class="timeline-desc">
+                High-distinction academic performance with intensive emphasis on quantitative mathematical analysis, formal physics, and logical reasoning.
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-item reveal-block reveal-left">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <div class="timeline-meta">
+                <span class="badge">Completed 2022</span>
+                <span class="timeline-grade">Score: 83.3%</span>
+              </div>
+              <h3 class="timeline-title">Secondary School Certificate (SSC)</h3>
+              <p class="timeline-org">Sai Chaithanya English Medium High School</p>
+              <p class="timeline-desc">
+                Completed secondary education with strong fundamentals in mathematics and general sciences.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Technical Skills Section -->
+    <section class="section" id="skills">
+      <div class="content-container">
+        <div class="section-header reveal-block reveal-up">
+          <h2 class="section-title">Technical Arsenal</h2>
+          <p class="section-subtitle">Languages, libraries, and computational foundations.</p>
+        </div>
+
+        <div class="skills-grid">
+          <!-- Systems & Logic -->
+          <div class="skill-category-card reveal-block reveal-left">
+            <div class="card-icon-box">⚙️</div>
+            <h3 class="skill-category-title">Programming Languages</h3>
+            <p class="skill-category-desc">Core systems languages for building algorithmically sound, high-performance logic.</p>
+            <div class="skill-pills">
+              <div class="skill-item">
+                <span class="skill-name">C</span>
+                <span class="skill-level">Core Systems & Memory</span>
+              </div>
+              <div class="skill-item">
+                <span class="skill-name">C++</span>
+                <span class="skill-level">OOP & Data Structures</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Web Engineering -->
+          <div class="skill-category-card reveal-block reveal-up stagger-1">
+            <div class="card-icon-box">🌐</div>
+            <h3 class="skill-category-title">Frontend Development</h3>
+            <p class="skill-category-desc">Structuring modern user interfaces with standard web specifications.</p>
+            <div class="skill-pills">
+              <div class="skill-item">
+                <span class="skill-name">HTML5</span>
+                <span class="skill-level">Semantic Structure & SEO</span>
+              </div>
+              <div class="skill-item">
+                <span class="skill-name">CSS3</span>
+                <span class="skill-level">Responsive & Modern Layouts</span>
+              </div>
+              <div class="skill-item">
+                <span class="skill-name">JavaScript (ES6+)</span>
+                <span class="skill-level">DOM & Interactive Logic</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Data & Foundations -->
+          <div class="skill-category-card reveal-block reveal-right stagger-2">
+            <div class="card-icon-box">🗄️</div>
+            <h3 class="skill-category-title">Database & Analytical</h3>
+            <p class="skill-category-desc">Practical exposure to relational database design and analytical workflows.</p>
+            <div class="skill-pills">
+              <div class="skill-item">
+                <span class="skill-name">Oracle Database</span>
+                <span class="skill-level">SQL Queries & Architecture</span>
+              </div>
+              <div class="skill-item">
+                <span class="skill-name">Analytical Logic</span>
+                <span class="skill-level">Critical Thinking (RITx)</span>
+              </div>
+              <div class="skill-item">
+                <span class="skill-name">CS Fundamentals</span>
+                <span class="skill-level">NPTEL Certified Concepts</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Terminal Simulator -->
+        <div class="terminal-container reveal-block reveal-up" id="code-terminal">
+          <div class="terminal-bar">
+            <div class="terminal-dots">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+            </div>
+            <div class="terminal-title">raghu_ram@nbkrist:~ (Terminal Demonstration)</div>
+            <div class="terminal-tabs">
+              <button class="t-tab active" onclick="switchSnippet('cpp')">solve.cpp</button>
+              <button class="t-tab" onclick="switchSnippet('c')">system.c</button>
+              <button class="t-tab" onclick="switchSnippet('js')">app.js</button>
+            </div>
+          </div>
+          <div class="terminal-body">
+            <pre><code id="terminal-code-display">// C++ Algorithmic Solution Demo
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+
+class Solution {
+public:
+    void evaluateCandidate() {
+        std::cout &lt;&lt; "Name: Karumanchi Raghu Ram\n";
+        std::cout &lt;&lt; "Role: Computer Science Engineer\n";
+        std::cout &lt;&lt; "Focus: Clean Logic, Rigorous Systems & Frontend\n";
+    }
+};
+
+int main() {
+    Solution dev;
+    dev.evaluateCandidate();
+    return 0;
+}</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Achievements & Certifications -->
+    <section class="section section-dim" id="achievements">
+      <div class="content-container">
+        <div class="section-header reveal-block reveal-up">
+          <h2 class="section-title">Certifications & Achievements</h2>
+          <p class="section-subtitle">Verified professional workshops and institutional courses.</p>
+        </div>
+
+        <div class="achievements-grid">
+          <div class="achievement-card reveal-block reveal-left">
+            <div class="achievement-badge">RITx</div>
+            <div class="achievement-body">
+              <h3 class="achievement-name">Critical Thinking & Problem Solving</h3>
+              <p class="achievement-issuer">Offered by Rochester Institute of Technology (RITx)</p>
+              <p class="achievement-desc">
+                Successfully completed specialized coursework honing structured analytical decision-making, root-cause decomposition, and evidence-based problem resolution.
+              </p>
+            </div>
+          </div>
+
+          <div class="achievement-card reveal-block reveal-up stagger-1">
+            <div class="achievement-badge">Oracle</div>
+            <div class="achievement-body">
+              <h3 class="achievement-name">Oracle Database Departmental Workshop</h3>
+              <p class="achievement-issuer">Organized by CSE Department, NBKRIST</p>
+              <p class="achievement-desc">
+                Participated in hands-on intensive technical workshop centered on Oracle DB principles, relational schema design, and query optimization.
+              </p>
+            </div>
+          </div>
+
+          <div class="achievement-card reveal-block reveal-right stagger-2">
+            <div class="achievement-badge">NPTEL</div>
+            <div class="achievement-body">
+              <h3 class="achievement-name">National Programme on Technology Enhanced Learning</h3>
+              <p class="achievement-issuer">IIT / IISc National Academic Initiative</p>
+              <p class="achievement-desc">
+                Completed online courses broadening knowledge in core computer science foundational concepts and academic software methodologies.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Chess & Strategic Thinking Section -->
+    <section class="section" id="strategy">
+      <div class="content-container">
+        <div class="section-header reveal-block reveal-up">
+          <h2 class="section-title">Chess, Books & Strategic Thinking</h2>
+          <p class="section-subtitle">How disciplined hobbies translate into software engineering excellence.</p>
+        </div>
+
+        <div class="strategy-layout">
+          <div class="strategy-prose reveal-block reveal-left">
+            <h3 class="strategy-heading">Engineering is Chess on a Digital Board</h3>
+            <p>
+              Beyond the terminal, I invest time in reading and playing chess. Chess teaches anticipation, positional patience, and evaluating multiple branches of execution before committing a move—the exact discipline required when engineering dependable software.
+            </p>
+
+            <div class="tactics-list">
+              <div class="tactic-item reveal-block reveal-left stagger-1">
+                <span class="tactic-num">01</span>
+                <div>
+                  <strong>Calculating Branch Consequences:</strong> In chess as in software debugging, predicting ripple effects across dependencies prevents critical regressions.
+                </div>
+              </div>
+              <div class="tactic-item reveal-block reveal-left stagger-2">
+                <span class="tactic-num">02</span>
+                <div>
+                  <strong>Punctuality & Clock Management:</strong> Rapid, accurate decision-making under strict time controls directly powers my work ethic and time management.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Interactive Chess Board Tactic Preview -->
+          <div class="chess-widget-container reveal-block reveal-right">
+            <div class="chess-header">
+              <span>Interactive Tactical Board</span>
+              <button class="chess-reset-btn" id="chess-reset" onclick="resetBoard()">Reset Position</button>
+            </div>
+            <div class="chess-board" id="chess-board">
+              <!-- Dynamically populated or rendered 8x8 grid -->
+            </div>
+            <div class="chess-status" id="chess-status">
+              Click any highlighted piece to inspect move calculation.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact & Direct Inquiries -->
+    <section class="section section-dim" id="contact">
+      <div class="content-container">
+        <div class="section-header text-center reveal-block reveal-up">
+          <h2 class="section-title">Let's Connect</h2>
+          <p class="section-subtitle">Open to software development opportunities, academic collaborations, and internships.</p>
+        </div>
+
+        <div class="contact-card-wrapper">
+          <div class="contact-info-col reveal-block reveal-left">
+            <h3 class="contact-col-title">Direct Coordinates</h3>
+            <p class="contact-col-lead">
+              Feel free to reach out directly via email, phone, or by submitting this message dispatch.
+            </p>
+
+            <div class="contact-point">
+              <div class="point-icon">📧</div>
+              <div>
+                <span class="point-label">Email Address</span>
+                <a href="mailto:ram392473@gmail.com" class="point-link">ram392473@gmail.com</a>
+              </div>
+            </div>
+
+            <div class="contact-point">
+              <div class="point-icon">📱</div>
+              <div>
+                <span class="point-label">Mobile Phone</span>
+                <a href="tel:+918099901954" class="point-link">+91 8099901954</a>
+              </div>
+            </div>
+
+            <div class="contact-point">
+              <div class="point-icon">📍</div>
+              <div>
+                <span class="point-label">Residence & Address</span>
+                <span class="point-text">25/5/412 11th Street, Sanjiv Gandhi Nagar, Nellore, Andhra Pradesh</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-form-col reveal-block reveal-right">
+            <form id="contact-form" onsubmit="handleFormSubmit(event)">
+              <div class="form-group">
+                <label for="contact-name">Your Name</label>
+                <input type="text" id="contact-name" name="name" required placeholder="e.g. John Doe">
+              </div>
+
+              <div class="form-group">
+                <label for="contact-email">Your Email</label>
+                <input type="email" id="contact-email" name="email" required placeholder="name@company.com">
+              </div>
+
+              <div class="form-group">
+                <label for="contact-message">Message or Inquiries</label>
+                <textarea id="contact-message" name="message" rows="4" required placeholder="Hello Raghu Ram, we would like to discuss an opportunity..."></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-block" id="send-msg-btn">
+                Transmit Message
+              </button>
+              <div id="form-feedback" class="form-feedback" role="alert"></div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="content-container footer-content">
+      <p>© 2026 Karumanchi Raghu Ram. All information verified against academic credentials.</p>
+      <div class="footer-links">
+        <a href="#hero-scroll">Return to Top ↑</a>
+        <span style="opacity: 0.3;">•</span>
+        <a href="admin.html" class="admin-portal-link" style="color: var(--accent-amber); font-family: var(--font-mono); font-size: 0.8rem; opacity: 0.85;">Admin Portal 🔒</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification Helper -->
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

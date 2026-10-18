@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Portal | Karumanchi Raghu Ram</title>
+  <meta name="description" content="Secure Admin Dashboard to view and manage user transmissions stored in Neon PostgreSQL.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="admin-body">
+
+  <!-- Password Authentication Modal Overlay -->
+  <div class="auth-overlay" id="auth-overlay">
+    <div class="auth-modal">
+      <div class="auth-icon">🛡️</div>
+      <h2 style="font-family: var(--font-display); font-size: 1.6rem; color: #fff; margin-bottom: 0.5rem;">Admin Access</h2>
+      <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+        Enter your administrative key to connect to the Neon cloud message feed.
+      </p>
+      <form onsubmit="handleAuthSubmit(event)">
+        <div class="form-group">
+          <input type="password" id="admin-passcode-input" placeholder="Enter Admin Passcode" required autocomplete="current-password" autofocus style="text-align: center; letter-spacing: 0.1em; font-family: var(--font-mono);">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block" id="auth-unlock-btn" style="margin-top: 1rem;">
+          Authenticate & Unlock
+        </button>
+        <div id="auth-error" style="color: #f87171; font-size: 0.85rem; margin-top: 0.75rem; display: none;"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Main Admin Interface -->
+  <header class="admin-header">
+    <div class="content-container admin-header-flex">
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <span class="brand-monogram">⚡</span>
+        <div>
+          <h1 style="font-size: 1.15rem; font-family: var(--font-display); color: var(--text-primary); line-height: 1.2;">
+            Neon DB Messages Management
+          </h1>
+          <span style="font-size: 0.78rem; color: var(--text-muted); font-family: var(--font-mono);">
+            Cluster: icy-dust-89227521 • PostgreSQL 18
+          </span>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <button class="btn btn-secondary btn-sm" onclick="fetchMessages()">↻ Refresh</button>
+        <button class="btn btn-secondary btn-sm" onclick="logoutAdmin()">🔒 Lock</button>
+        <a href="index.html" class="btn btn-primary btn-sm">← View Portfolio</a>
+      </div>
+    </div>
+  </header>
+
+  <main style="flex: 1;">
+    <div class="content-container">
+      <!-- Admin Statistics Grid -->
+      <div class="admin-stats-grid">
+        <div class="admin-stat-card">
+          <span class="admin-stat-val" id="stat-total-count">0</span>
+          <span class="admin-stat-label">Total Messages</span>
+        </div>
+        <div class="admin-stat-card">
+          <span class="admin-stat-val" id="stat-latest-time" style="font-size: 1.2rem; padding-top: 0.5rem;">—</span>
+          <span class="admin-stat-label">Latest Inquiry</span>
+        </div>
+        <div class="admin-stat-card">
+          <span class="admin-stat-val" style="color: var(--accent-emerald);">Cloud Live</span>
+          <span class="admin-stat-label">Neon Connection</span>
+        </div>
+      </div>
+
+      <!-- Controls & Filter Toolbar -->
+      <div class="admin-controls">
+        <h2 style="font-family: var(--font-display); font-size: 1.35rem; color: var(--text-primary);">
+          Visitor Inquiries & Comments (<span id="count-badge">0</span>)
+        </h2>
+        <input type="text" id="filter-input" class="search-input" placeholder="Search by name, email, or text..." oninput="filterMessages()">
+      </div>
+
+      <!-- Feed of Comments -->
+      <div class="comments-feed" id="comments-container">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="content-container footer-content">
+      <p>© 2026 Karumanchi Raghu Ram • Neon Cloud Storage</p>
+      <div class="footer-links">
+        <a href="index.html">Return to Portfolio</a>
+      </div>
+    </div>
+  </footer>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    let allMessages = [];
+    let currentKey = sessionStorage.getItem("neon_admin_key") || "";
+
+    function showToast(msg) {
+      const t = document.getElementById("toast");
+      if (!t) return;
+      t.textContent = msg;
+      t.classList.add("show");
+      setTimeout(() => t.classList.remove("show"), 3200);
+    }
+
+    function checkAuthOnLoad() {
+      if (currentKey) {
+        document.getElementById("auth-overlay").style.display = "none";
+        fetchMessages();
+      }
+    }
+
+    async function handleAuthSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById("admin-passcode-input");
+      const errEl = document.getElementById("auth-error");
+      const btn = document.getElementById("auth-unlock-btn");
+      
+      const key = input.value.trim();
+      btn.disabled = true;
+      btn.textContent = "Verifying...";
+      errEl.style.display = "none";
+
+      try {
+        const res = await fetch(`/api/messages?key=${encodeURIComponent(key)}`);
+        if (res.ok) {
+          currentKey = key;
+          sessionStorage.setItem("neon_admin_key", key);
+          document.getElementById("auth-overlay").style.display = "none";
+          const data = await res.json();
+          renderMessages(data.messages || []);
+          showToast("Admin session unlocked!");
+        } else {
+          errEl.textContent = "Incorrect passcode. Access denied.";
+          errEl.style.display = "block";
+        }
+      } catch (err) {
+        errEl.textContent = "Unable to connect to server: " + err.message;
+        errEl.style.display = "block";
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Authenticate & Unlock";
+      }
+    }
+
+    function logoutAdmin() {
+      sessionStorage.removeItem("neon_admin_key");
+      currentKey = "";
+      document.getElementById("auth-overlay").style.display = "flex";
+      document.getElementById("admin-passcode-input").value = "";
+      allMessages = [];
+      renderMessages([]);
+      showToast("Admin session locked.");
+    }
+
+    async function fetchMessages() {
+      if (!currentKey) return;
+      try {
+        const res = await fetch(`/api/messages?key=${encodeURIComponent(currentKey)}`);
+        if (res.status === 401) {
+          logoutAdmin();
+          return;
+        }
+        const data = await res.json();
+        allMessages = data.messages || [];
+        renderMessages(allMessages);
+      } catch (err) {
+        showToast("Error retrieving messages: " + err.message);
+      }
+    }
+
+    function renderMessages(messages) {
+      const container = document.getElementById("comments-container");
+      const totalCountEl = document.getElementById("stat-total-count");
+      const countBadge = document.getElementById("count-badge");
+      const latestTimeEl = document.getElementById("stat-latest-time");
+
+      totalCountEl.textContent = messages.length;
+      countBadge.textContent = messages.length;
+
+      if (messages.length > 0) {
+        const newest = new Date(messages[0].created_at);
+        latestTimeEl.textContent = isNaN(newest) ? messages[0].created_at.slice(0, 10) : newest.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      } else {
+        latestTimeEl.textContent = "—";
+      }
+
+      if (!messages || messages.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">📬</div>
+            <h3 style="font-family: var(--font-display); color: var(--text-primary); margin-bottom: 0.25rem;">No Comments Stored</h3>
+            <p>Any transmissions sent through the portfolio contact form will appear here in real-time.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = messages.map(msg => {
+        const dateStr = formatDate(msg.created_at);
+        const initials = getInitials(msg.name);
+        return `
+          <div class="comment-card" id="msg-card-${msg.id}">
+            <div class="comment-header">
+              <div class="comment-author-info">
+                <div class="author-avatar">${initials}</div>
+                <div class="author-meta">
+                  <span class="author-name">${escapeHtml(msg.name)}</span>
+                  <a href="mailto:${escapeHtml(msg.email)}" class="author-email">✉ ${escapeHtml(msg.email)}</a>
+                </div>
+              </div>
+              <div class="comment-meta-right">
+                <span class="comment-date">🕒 ${dateStr}</span>
+                <button class="btn-delete" onclick="deleteMessage(${msg.id})">
+                  <span>🗑️</span> Delete
+                </button>
+              </div>
+            </div>
+            <div class="comment-body">${escapeHtml(msg.message)}</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function filterMessages() {
+      const query = document.getElementById("filter-input").value.toLowerCase();
+      if (!query) {
+        renderMessages(allMessages);
+        return;
+      }
+      const filtered = allMessages.filter(m => 
+        (m.name && m.name.toLowerCase().includes(query)) ||
+        (m.email && m.email.toLowerCase().includes(query)) ||
+        (m.message && m.message.toLowerCase().includes(query))
+      );
+      renderMessages(filtered);
+    }
+
+    async function deleteMessage(id) {
+      if (!confirm(`Are you sure you want to permanently delete comment #${id} from Neon DB?`)) {
+        return;
+      }
+
+      const card = document.getElementById(`msg-card-${id}`);
+      if (card) {
+        card.classList.add("deleting");
+      }
+
+      try {
+        const res = await fetch(`/api/messages/${id}?key=${encodeURIComponent(currentKey)}`, {
+          method: "DELETE"
+        });
+
+        const data = await res.json();
+        if (res.ok && data.success) {
+          showToast(`Comment #${id} deleted from Neon DB.`);
+          allMessages = allMessages.filter(m => m.id !== id);
+          setTimeout(() => renderMessages(allMessages), 300);
+        } else {
+          throw new Error(data.error || "Failed to delete from database");
+        }
+      } catch (err) {
+        if (card) card.classList.remove("deleting");
+        showToast("Delete error: " + err.message);
+      }
+    }
+
+    function formatDate(raw) {
+      if (!raw) return "";
+      const d = new Date(raw);
+      if (isNaN(d.getTime())) return raw;
+      return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) + " at " +
+             d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function getInitials(name) {
+      if (!name) return "KR";
+      const parts = name.trim().split(" ");
+      if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+      return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    }
+
+    function escapeHtml(str) {
+      if (!str) return "";
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    document.addEventListener("DOMContentLoaded", checkAuthOnLoad);
+  </script>
+</body>
+</html>

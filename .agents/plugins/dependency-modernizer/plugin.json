@@ -1,0 +1,5 @@
+{
+  "name": "dependency-modernizer",
+  "version": "1.0.0",
+  "description": "Targeted operational skill for auditing, updating, and modernizing project dependencies safely."
+}
