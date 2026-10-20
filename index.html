@@ -35,9 +35,59 @@
           <span class="btn-icon">✉</span> ram392473@gmail.com
         </a>
         <a href="#contact" class="btn btn-primary btn-sm" id="header-contact-btn">Get In Touch</a>
+        <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Toggle Navigation Menu" aria-expanded="false" aria-controls="mobile-drawer">
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+        </button>
       </div>
     </div>
   </header>
+
+  <!-- Mobile Slide-In Navigation Drawer -->
+  <div class="mobile-drawer-backdrop" id="mobile-drawer-backdrop" aria-hidden="true"></div>
+  <aside class="mobile-drawer" id="mobile-drawer" aria-label="Mobile Navigation" aria-hidden="true">
+    <div class="drawer-header">
+      <div class="brand-badge">
+        <span class="brand-monogram">KR</span>
+        <span class="brand-meta">
+          <strong class="brand-name">Raghu Ram</strong>
+          <span class="brand-role">CS Undergrad</span>
+        </span>
+      </div>
+      <button class="drawer-close-btn" id="drawer-close-btn" aria-label="Close Navigation Menu">✕</button>
+    </div>
+
+    <nav class="drawer-links" id="drawer-navigation">
+      <a href="#about" class="drawer-link">
+        <span class="drawer-link-num">01</span> About & Objective
+      </a>
+      <a href="#education" class="drawer-link">
+        <span class="drawer-link-num">02</span> Education Milestones
+      </a>
+      <a href="#skills" class="drawer-link">
+        <span class="drawer-link-num">03</span> Technical Skills & Code
+      </a>
+      <a href="#achievements" class="drawer-link">
+        <span class="drawer-link-num">04</span> Certifications
+      </a>
+      <a href="#strategy" class="drawer-link">
+        <span class="drawer-link-num">05</span> Chess & Strategy
+      </a>
+      <a href="#contact" class="drawer-link drawer-link-highlight">
+        <span class="drawer-link-num">06</span> Contact Raghu Ram
+      </a>
+    </nav>
+
+    <div class="drawer-footer">
+      <a href="mailto:ram392473@gmail.com" class="btn btn-secondary btn-block btn-sm">
+        <span class="btn-icon">✉</span> ram392473@gmail.com
+      </a>
+      <a href="#contact" class="btn btn-primary btn-block btn-sm" style="margin-top: 0.5rem;" id="drawer-cta-btn">
+        Get In Touch
+      </a>
+    </div>
+  </aside>
 
   <main>
     <!-- Cinematic Scroll-Scrubbed Zero-G Chess Intro -->
@@ -59,6 +109,9 @@
             <p class="hero-phase-lead">
               Every move deliberate. Every line engineered. Scroll down to initiate zero-gravity simulation.
             </p>
+            <div class="hero-phase-actions-row">
+              <a href="#hero" class="btn btn-secondary btn-sm hero-skip-btn">Skip to Portfolio ↓</a>
+            </div>
           </div>
 
           <!-- Phase 2: Candidate Headline (32% to ~65%) -->

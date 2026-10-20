@@ -432,10 +432,70 @@ function initScrollReveals() {
   revealElements.forEach(el => observer.observe(el));
 }
 
+/* -------------------------------------------------------------
+   Mobile Drawer Controller
+------------------------------------------------------------- */
+function initMobileDrawer() {
+  const toggleBtn = document.getElementById("mobile-nav-toggle");
+  const drawer = document.getElementById("mobile-drawer");
+  const backdrop = document.getElementById("mobile-drawer-backdrop");
+  const closeBtn = document.getElementById("drawer-close-btn");
+  const drawerLinks = document.querySelectorAll(".drawer-link, #drawer-cta-btn");
+
+  if (!toggleBtn || !drawer || !backdrop) return;
+
+  function openDrawer() {
+    drawer.classList.add("is-open");
+    backdrop.classList.add("is-open");
+    toggleBtn.classList.add("is-active");
+    toggleBtn.setAttribute("aria-expanded", "true");
+    drawer.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeDrawer() {
+    drawer.classList.remove("is-open");
+    backdrop.classList.remove("is-open");
+    toggleBtn.classList.remove("is-active");
+    toggleBtn.setAttribute("aria-expanded", "false");
+    drawer.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+  }
+
+  toggleBtn.addEventListener("click", () => {
+    const isOpen = drawer.classList.contains("is-open");
+    if (isOpen) {
+      closeDrawer();
+    } else {
+      openDrawer();
+    }
+  });
+
+  if (closeBtn) {
+    closeBtn.addEventListener("click", closeDrawer);
+  }
+
+  backdrop.addEventListener("click", closeDrawer);
+
+  drawerLinks.forEach(link => {
+    link.addEventListener("click", () => {
+      closeDrawer();
+    });
+  });
+
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && drawer.classList.contains("is-open")) {
+      closeDrawer();
+    }
+  });
+}
+
 // Initialize on page load
 document.addEventListener("DOMContentLoaded", () => {
   renderChessBoard();
   initChessHeroSequence();
   initScrollReveals();
+  initMobileDrawer();
 });
+
 
