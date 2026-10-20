@@ -494,17 +494,25 @@ int main() {
             </div>
           </div>
 
-          <!-- Interactive Chess Board Tactic Preview -->
+          <!-- Interactive Chess Board Playable Engine -->
           <div class="chess-widget-container reveal-block reveal-right">
             <div class="chess-header">
-              <span>Interactive Tactical Board</span>
-              <button class="chess-reset-btn" id="chess-reset" onclick="resetBoard()">Reset Position</button>
+              <div class="chess-title-wrap">
+                <span class="chess-title-text">♟ Raghu's Tactical Engine</span>
+                <span class="badge badge-accent" id="chess-turn-badge">White to move (You)</span>
+              </div>
+              <div class="chess-header-actions">
+                <span class="chess-mode-tag" id="chess-mode-tag">VS BOT</span>
+                <button class="chess-reset-btn" id="chess-reset" onclick="resetBoard()">Reset Game</button>
+              </div>
             </div>
-            <div class="chess-board" id="chess-board">
-              <!-- Dynamically populated or rendered 8x8 grid -->
+            <div class="chess-board-wrapper">
+              <div class="chess-board" id="chess-board">
+                <!-- Dynamically populated 8x8 grid with SVG pieces and legal move highlights -->
+              </div>
             </div>
             <div class="chess-status" id="chess-status">
-              Click any highlighted piece to inspect move calculation.
+              White moves first. Click or tap any white piece to preview calculated legal paths.
             </div>
           </div>
         </div>

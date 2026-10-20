@@ -134,79 +134,393 @@ async function handleFormSubmit(event) {
   }
 }
 
-// Interactive Chess Tactical Widget
-const initialPieces = {
-  'e8': '♚', 'd8': '♛', 'c8': '♝', 'b8': '♞', 'a8': '♜', 'f8': '♝', 'g8': '♞', 'h8': '♜',
-  'a7': '♟', 'b7': '♟', 'c7': '♟', 'd7': '♟', 'e7': '♟', 'f7': '♟', 'g7': '♟', 'h7': '♟',
-  'a2': '♙', 'b2': '♙', 'c2': '♙', 'd2': '♙', 'e4': '♙', 'f2': '♙', 'g2': '♙', 'h2': '♙',
-  'a1': '♖', 'f3': '♘', 'c1': '♗', 'd1': '♕', 'e1': '♔', 'f1': '♗', 'c3': '♘', 'h1': '♖'
+// -------------------------------------------------------------
+// Playable Mini-Chess Engine with Symmetrical Graphics & Tactical Bot
+// -------------------------------------------------------------
+
+// Crisp High-Craft Vector SVG Chess Pieces (True Gold/Amber for White, Obsidian/Charcoal for Black)
+const CHESS_SVGS = {
+  // White pieces (Amber-Gold Glow)
+  'wP': `<svg viewBox="0 0 45 45" class="chess-piece-svg"><path d="M22.5 9c-2.2 0-4 1.8-4 4 0 1.2.5 2.3 1.4 3-1.6.8-3 2.5-3 4.5 0 1.3.6 2.5 1.5 3.3-1.5 1-2.4 2.8-2.4 4.7 0 2.8 2 5.2 4.7 5.8L20 37h5l-.7-2.7c2.7-.6 4.7-3 4.7-5.8 0-1.9-.9-3.7-2.4-4.7.9-.8 1.5-2 1.5-3.3 0-2-1.4-3.7-3-4.5.9-.7 1.4-1.8 1.4-3 0-2.2-1.8-4-4-4z" fill="#f8eed9" stroke="#d4af37" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+  'wR': `<svg viewBox="0 0 45 45" class="chess-piece-svg"><path d="M9 39h27v-3H9v3zm3-4.5h21l-1.5-6H13.5l-1.5 6zM14 14.5v11h17v-11H14zM11 9v4h3v-2.5h5V13h7v-2.5h5V13h3V9H11z" fill="#f8eed9" stroke="#d4af37" stroke-width="1.5"/></svg>`,
+  'wN': `<svg viewBox="0 0 45 45" class="chess-piece-svg"><path d="M22 10c-5.5 0-8 3.5-9 7.5-.7 3 .5 6.5 2 8.5-1.5 1.5-3.5 4-3.5 7h23c0-3.5-1.5-6-3-7.5 1-2 2-5 1.5-8-1-5.5-5.5-7.5-11-7.5zm-3 7.5c.8 0 1.5.7 1.5 1.5s-.7 1.5-1.5 1.5-1.5-.7-1.5-1.5.7-1.5 1.5-1.5z" fill="#f8eed9" stroke="#d4af37" stroke-width="1.5"/></svg>`,
+  'wB': `<svg viewBox="0 0 45 45" class="chess-piece-svg"><path d="M22.5 8c-3 0-5 3.5-5 7 0 2.5 1.2 4.5 2.5 5.5-2 1.5-3 4-3 6.5 0 3 2 5.5 5.5 6 3.5-.5 5.5-3 5.5-6 0-2.5-1-5-3-6.5 1.3-1 2.5-3 2.5-5.5 0-3.5-2-7-5-7zm-4 28h8v3h-8v-3z" fill="#f8eed9" stroke="#d4af37" stroke-width="1.5"/></svg>`,
+  'wQ': `<svg viewBox="0 0 45 45" class="chess-piece-svg"><path d="M9 26l3.5-12.5 6 8.5 4-11 4 11 6-8.5L36 26H9zm2 3h23v4H11v-4zm-2 6h27v3H9v-3z" fill="#f8eed9" stroke="#d4af37" stroke-width="1.5"/></svg>`,
+  'wK': `<svg viewBox="0 0 45 45" class="chess-piece-svg"><path d="M22.5 8v4m-2-2h4M11.5 37h22v-3h-22v3zm2-5h18l-1.5-6h-15l-1.5 6zm2-8h14c2-4 3-8 1-11-2-3-6-3-8 0-2-3-6-3-8 0-2 3-1 7 1 11z" fill="#f8eed9" stroke="#d4af37" stroke-width="1.5"/></svg>`,
+
+  // Black pieces (Obsidian-Charcoal with Slate Border)
+  'bP': `<svg viewBox="0 0 45 45" class="chess-piece-svg"><path d="M22.5 9c-2.2 0-4 1.8-4 4 0 1.2.5 2.3 1.4 3-1.6.8-3 2.5-3 4.5 0 1.3.6 2.5 1.5 3.3-1.5 1-2.4 2.8-2.4 4.7 0 2.8 2 5.2 4.7 5.8L20 37h5l-.7-2.7c2.7-.6 4.7-3 4.7-5.8 0-1.9-.9-3.7-2.4-4.7.9-.8 1.5-2 1.5-3.3 0-2-1.4-3.7-3-4.5.9-.7 1.4-1.8 1.4-3 0-2.2-1.8-4-4-4z" fill="#1b1d24" stroke="#8b949e" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+  'bR': `<svg viewBox="0 0 45 45" class="chess-piece-svg"><path d="M9 39h27v-3H9v3zm3-4.5h21l-1.5-6H13.5l-1.5 6zM14 14.5v11h17v-11H14zM11 9v4h3v-2.5h5V13h7v-2.5h5V13h3V9H11z" fill="#1b1d24" stroke="#8b949e" stroke-width="1.5"/></svg>`,
+  'bN': `<svg viewBox="0 0 45 45" class="chess-piece-svg"><path d="M22 10c-5.5 0-8 3.5-9 7.5-.7 3 .5 6.5 2 8.5-1.5 1.5-3.5 4-3.5 7h23c0-3.5-1.5-6-3-7.5 1-2 2-5 1.5-8-1-5.5-5.5-7.5-11-7.5zm-3 7.5c.8 0 1.5.7 1.5 1.5s-.7 1.5-1.5 1.5-1.5-.7-1.5-1.5.7-1.5 1.5-1.5z" fill="#1b1d24" stroke="#8b949e" stroke-width="1.5"/></svg>`,
+  'bB': `<svg viewBox="0 0 45 45" class="chess-piece-svg"><path d="M22.5 8c-3 0-5 3.5-5 7 0 2.5 1.2 4.5 2.5 5.5-2 1.5-3 4-3 6.5 0 3 2 5.5 5.5 6 3.5-.5 5.5-3 5.5-6 0-2.5-1-5-3-6.5 1.3-1 2.5-3 2.5-5.5 0-3.5-2-7-5-7zm-4 28h8v3h-8v-3z" fill="#1b1d24" stroke="#8b949e" stroke-width="1.5"/></svg>`,
+  'bQ': `<svg viewBox="0 0 45 45" class="chess-piece-svg"><path d="M9 26l3.5-12.5 6 8.5 4-11 4 11 6-8.5L36 26H9zm2 3h23v4H11v-4zm-2 6h27v3H9v-3z" fill="#1b1d24" stroke="#8b949e" stroke-width="1.5"/></svg>`,
+  'bK': `<svg viewBox="0 0 45 45" class="chess-piece-svg"><path d="M22.5 8v4m-2-2h4M11.5 37h22v-3h-22v3zm2-5h18l-1.5-6h-15l-1.5 6zm2-8h14c2-4 3-8 1-11-2-3-6-3-8 0-2-3-6-3-8 0-2 3-1 7 1 11z" fill="#1b1d24" stroke="#8b949e" stroke-width="1.5"/></svg>`
 };
 
-const tacticalDescriptions = {
-  'f3': "White Knight on f3 controlling e5 and d4 central outposts. Demonstrates calculated forward positioning.",
-  'c3': "White Knight on c3 guarding the d5 square. Parallel execution in code structure.",
-  'e4': "King's Pawn opening advance: secures spatial advantage and unblocks diagonal vectors.",
-  'e1': "King on e1: well protected by coordinated defensive files.",
-  'd1': "Queen on d1: prepared for rapid tactical mobilization across ranks and files."
+// Symmetrical Standard Chess Starting Setup
+const INITIAL_CHESS_BOARD = {
+  // Rank 8 - Black Pieces
+  'a8': 'bR', 'b8': 'bN', 'c8': 'bB', 'd8': 'bQ', 'e8': 'bK', 'f8': 'bB', 'g8': 'bN', 'h8': 'bR',
+  // Rank 7 - Black Pawns
+  'a7': 'bP', 'b7': 'bP', 'c7': 'bP', 'd7': 'bP', 'e7': 'bP', 'f7': 'bP', 'g7': 'bP', 'h7': 'bP',
+  // Rank 2 - White Pawns
+  'a2': 'wP', 'b2': 'wP', 'c2': 'wP', 'd2': 'wP', 'e2': 'wP', 'f2': 'wP', 'g2': 'wP', 'h2': 'wP',
+  // Rank 1 - White Pieces
+  'a1': 'wR', 'b1': 'wN', 'c1': 'wB', 'd1': 'wQ', 'e1': 'wK', 'f1': 'wB', 'g1': 'wN', 'h1': 'wR'
 };
+
+let gameState = {
+  board: { ...INITIAL_CHESS_BOARD },
+  turn: 'w', // 'w' = White (User), 'b' = Black (Bot)
+  selectedSquare: null,
+  validMoves: [],
+  history: [],
+  isThinking: false
+};
+
+const FILES = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+const RANKS = [8, 7, 6, 5, 4, 3, 2, 1];
+
+function coordToXY(coord) {
+  const file = FILES.indexOf(coord[0]);
+  const rank = parseInt(coord[1], 10);
+  return { x: file, y: 8 - rank }; // 0-7, 0 is rank 8, 7 is rank 1
+}
+
+function xyToCoord(x, y) {
+  if (x < 0 || x > 7 || y < 0 || y > 7) return null;
+  return `${FILES[x]}${8 - y}`;
+}
 
 function renderChessBoard() {
-  const board = document.getElementById("chess-board");
-  if (!board) return;
-  board.innerHTML = "";
+  const boardEl = document.getElementById("chess-board");
+  if (!boardEl) return;
+  boardEl.innerHTML = "";
 
-  const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-  const ranks = [8, 7, 6, 5, 4, 3, 2, 1];
-
-  ranks.forEach((rank, rIdx) => {
-    files.forEach((file, fIdx) => {
-      const square = document.createElement("div");
+  RANKS.forEach((rank, rIdx) => {
+    FILES.forEach((file, fIdx) => {
       const coord = `${file}${rank}`;
+      const square = document.createElement("div");
+      // Symmetrical board rule: a1 (fIdx 0, rank 1 -> rIdx 7) is dark; h1 is light
       const isLight = (rIdx + fIdx) % 2 === 0;
 
       square.className = `chess-square ${isLight ? 'light' : 'dark'}`;
       square.dataset.coord = coord;
 
-      if (initialPieces[coord]) {
-        square.textContent = initialPieces[coord];
-        if (tacticalDescriptions[coord]) {
-          square.style.cursor = "pointer";
+      // Add edge coordinate labels for chess symmetry
+      if (fIdx === 0) {
+        const rankLabel = document.createElement("span");
+        rankLabel.className = "coord-label rank-label";
+        rankLabel.textContent = rank;
+        square.appendChild(rankLabel);
+      }
+      if (rIdx === 7) {
+        const fileLabel = document.createElement("span");
+        fileLabel.className = "coord-label file-label";
+        fileLabel.textContent = file;
+        square.appendChild(fileLabel);
+      }
+
+      // Render Piece SVG if present
+      const piece = gameState.board[coord];
+      if (piece) {
+        const pieceWrap = document.createElement("div");
+        pieceWrap.className = `chess-piece ${piece.startsWith('w') ? 'piece-white' : 'piece-black'}`;
+        pieceWrap.innerHTML = CHESS_SVGS[piece] || '';
+        square.appendChild(pieceWrap);
+      }
+
+      // Highlight selected square
+      if (gameState.selectedSquare === coord) {
+        square.classList.add("selected");
+      }
+
+      // Highlight legal target moves
+      if (gameState.validMoves.includes(coord)) {
+        if (gameState.board[coord]) {
+          square.classList.add("legal-capture");
+        } else {
+          square.classList.add("legal-move");
         }
       }
 
-      square.addEventListener("click", () => handleSquareClick(coord));
-      board.appendChild(square);
+      square.addEventListener("click", () => handleSquareInteraction(coord));
+      boardEl.appendChild(square);
     });
   });
+
+  updateChessStatusHUD();
 }
 
-function handleSquareClick(coord) {
-  const statusEl = document.getElementById("chess-status");
-  const allSquares = document.querySelectorAll(".chess-square");
-  allSquares.forEach(sq => sq.classList.remove("selected", "highlight"));
+function handleSquareInteraction(coord) {
+  if (gameState.isThinking) return;
 
-  const targetSq = document.querySelector(`[data-coord="${coord}"]`);
-  if (targetSq) {
-    targetSq.classList.add("selected");
+  const piece = gameState.board[coord];
+
+  // Case 1: Square contains player's piece -> Select it and compute legal moves
+  if (piece && piece[0] === gameState.turn) {
+    gameState.selectedSquare = coord;
+    gameState.validMoves = calculateLegalMoves(coord, gameState.board);
+    renderChessBoard();
+    return;
   }
 
-  if (tacticalDescriptions[coord]) {
-    statusEl.textContent = `[${coord.toUpperCase()}] ${tacticalDescriptions[coord]}`;
-    showToast(`Tactical inspection: ${coord.toUpperCase()}`);
-  } else if (initialPieces[coord]) {
-    statusEl.textContent = `[${coord.toUpperCase()}] Piece ${initialPieces[coord]} positioned at ${coord}.`;
+  // Case 2: Player previously selected a piece and clicks a valid destination
+  if (gameState.selectedSquare && gameState.validMoves.includes(coord)) {
+    executeMove(gameState.selectedSquare, coord);
+    return;
+  }
+
+  // Case 3: Clicked empty or invalid square -> Deselect
+  if (gameState.selectedSquare) {
+    gameState.selectedSquare = null;
+    gameState.validMoves = [];
+    renderChessBoard();
+  }
+}
+
+function calculateLegalMoves(fromCoord, board) {
+  const piece = board[fromCoord];
+  if (!piece) return [];
+
+  const color = piece[0]; // 'w' or 'b'
+  const type = piece[1];  // 'P', 'R', 'N', 'B', 'Q', 'K'
+  const { x, y } = coordToXY(fromCoord);
+  const moves = [];
+
+  function addIfValid(targetX, targetY) {
+    const targetCoord = xyToCoord(targetX, targetY);
+    if (!targetCoord) return false;
+    const destPiece = board[targetCoord];
+    if (!destPiece) {
+      moves.push(targetCoord);
+      return true; // continue sliding
+    }
+    if (destPiece[0] !== color) {
+      moves.push(targetCoord);
+    }
+    return false; // hit piece, stop ray
+  }
+
+  // 1. Pawn Moves
+  if (type === 'P') {
+    const dir = color === 'w' ? -1 : 1; // white moves up (-y), black down (+y)
+    const startY = color === 'w' ? 6 : 1;
+
+    // Single step forward
+    const forwardOne = xyToCoord(x, y + dir);
+    if (forwardOne && !board[forwardOne]) {
+      moves.push(forwardOne);
+      // Double step from starting rank
+      const forwardTwo = xyToCoord(x, y + 2 * dir);
+      if (y === startY && forwardTwo && !board[forwardTwo]) {
+        moves.push(forwardTwo);
+      }
+    }
+
+    // Diagonal captures
+    [-1, 1].forEach(dx => {
+      const diagCoord = xyToCoord(x + dx, y + dir);
+      if (diagCoord && board[diagCoord] && board[diagCoord][0] !== color) {
+        moves.push(diagCoord);
+      }
+    });
+  }
+
+  // 2. Knight Moves (L-shape)
+  if (type === 'N') {
+    const knightDeltas = [
+      [-2, -1], [-2, 1], [-1, -2], [-1, 2],
+      [1, -2], [1, 2], [2, -1], [2, 1]
+    ];
+    knightDeltas.forEach(([dx, dy]) => {
+      const tc = xyToCoord(x + dx, y + dy);
+      if (tc && (!board[tc] || board[tc][0] !== color)) {
+        moves.push(tc);
+      }
+    });
+  }
+
+  // 3. Bishop & Queen Diagonal Rays
+  if (type === 'B' || type === 'Q') {
+    const dirs = [[-1, -1], [1, -1], [-1, 1], [1, 1]];
+    dirs.forEach(([dx, dy]) => {
+      let curX = x + dx;
+      let curY = y + dy;
+      while (curX >= 0 && curX <= 7 && curY >= 0 && curY <= 7) {
+        if (!addIfValid(curX, curY)) break;
+        curX += dx;
+        curY += dy;
+      }
+    });
+  }
+
+  // 4. Rook & Queen Straight Rays
+  if (type === 'R' || type === 'Q') {
+    const dirs = [[0, -1], [0, 1], [-1, 0], [1, 0]];
+    dirs.forEach(([dx, dy]) => {
+      let curX = x + dx;
+      let curY = y + dy;
+      while (curX >= 0 && curX <= 7 && curY >= 0 && curY <= 7) {
+        if (!addIfValid(curX, curY)) break;
+        curX += dx;
+        curY += dy;
+      }
+    });
+  }
+
+  // 5. King Moves (Single step all 8 directions)
+  if (type === 'K') {
+    const kingDeltas = [
+      [-1, -1], [0, -1], [1, -1],
+      [-1,  0],          [1,  0],
+      [-1,  1], [0,  1], [1,  1]
+    ];
+    kingDeltas.forEach(([dx, dy]) => {
+      const tc = xyToCoord(x + dx, y + dy);
+      if (tc && (!board[tc] || board[tc][0] !== color)) {
+        moves.push(tc);
+      }
+    });
+  }
+
+  return moves;
+}
+
+function executeMove(fromCoord, toCoord) {
+  const movingPiece = gameState.board[fromCoord];
+  const capturedPiece = gameState.board[toCoord];
+
+  // Perform move on board
+  delete gameState.board[fromCoord];
+
+  // Pawn promotion to Queen
+  if (movingPiece === 'wP' && toCoord.endsWith('8')) {
+    gameState.board[toCoord] = 'wQ';
+  } else if (movingPiece === 'bP' && toCoord.endsWith('1')) {
+    gameState.board[toCoord] = 'bQ';
   } else {
-    statusEl.textContent = `Square ${coord.toUpperCase()}: Vacant square ready for territorial advance.`;
+    gameState.board[toCoord] = movingPiece;
+  }
+
+  gameState.history.push({ from: fromCoord, to: toCoord, piece: movingPiece, captured: capturedPiece });
+  gameState.selectedSquare = null;
+  gameState.validMoves = [];
+
+  // Audio/Visual Feedback
+  if (capturedPiece) {
+    showToast(`Captured ${getPieceName(capturedPiece)} at ${toCoord.toUpperCase()}!`);
+  }
+
+  // Switch turn
+  gameState.turn = gameState.turn === 'w' ? 'b' : 'w';
+  renderChessBoard();
+
+  // If Black's turn, trigger Bot response after a human-like contemplation delay
+  if (gameState.turn === 'b') {
+    gameState.isThinking = true;
+    updateChessStatusHUD("Bot is calculating counter-tactics...");
+
+    setTimeout(() => {
+      makeBotMove();
+      gameState.isThinking = false;
+      renderChessBoard();
+    }, 600);
+  }
+}
+
+function makeBotMove() {
+  const allBlackMoves = [];
+
+  // Gather all legal moves for all black pieces
+  Object.keys(gameState.board).forEach(coord => {
+    if (gameState.board[coord] && gameState.board[coord].startsWith('b')) {
+      const legalMoves = calculateLegalMoves(coord, gameState.board);
+      legalMoves.forEach(target => {
+        allBlackMoves.push({
+          from: coord,
+          to: target,
+          captured: gameState.board[target]
+        });
+      });
+    }
+  });
+
+  if (allBlackMoves.length === 0) {
+    showToast("Checkmate or Stalemate! White wins.");
+    updateChessStatusHUD("Checkmate! Game complete. White wins!");
+    return;
+  }
+
+  // Tactical Bot Decision Matrix:
+  // 1. Highest priority: Captures with piece valuation (Q > R > B/N > P)
+  // 2. Center control (e4, d4, e5, d5, f6, c6)
+  // 3. Fallback: deliberate tactical opening move
+  const pieceValues = { 'wQ': 9, 'wR': 5, 'wB': 3, 'wN': 3, 'wP': 1, 'wK': 100 };
+  const centerSquares = ['e4', 'd4', 'e5', 'd5', 'f6', 'c6', 'f3', 'c3'];
+
+  allBlackMoves.forEach(m => {
+    let score = 0;
+    if (m.captured) {
+      score += (pieceValues[m.captured] || 1) * 10;
+    }
+    if (centerSquares.includes(m.to)) {
+      score += 2;
+    }
+    m.score = score;
+  });
+
+  // Sort by highest strategic score, break ties randomly
+  allBlackMoves.sort((a, b) => b.score - a.score || (Math.random() - 0.5));
+  const chosenMove = allBlackMoves[0];
+
+  executeMove(chosenMove.from, chosenMove.to);
+}
+
+function getPieceName(code) {
+  const names = {
+    'P': 'Pawn', 'R': 'Rook', 'N': 'Knight', 'B': 'Bishop', 'Q': 'Queen', 'K': 'King'
+  };
+  return names[code[1]] || 'Piece';
+}
+
+function updateChessStatusHUD(customText) {
+  const statusEl = document.getElementById("chess-status");
+  const turnBadge = document.getElementById("chess-turn-badge");
+
+  if (turnBadge) {
+    if (gameState.turn === 'w') {
+      turnBadge.textContent = "White to move (You)";
+      turnBadge.className = "badge badge-accent";
+    } else {
+      turnBadge.textContent = "Black to move (Bot)";
+      turnBadge.className = "badge";
+      turnBadge.style.color = "var(--accent-amber)";
+    }
+  }
+
+  if (statusEl) {
+    if (customText) {
+      statusEl.textContent = customText;
+    } else if (gameState.turn === 'w') {
+      statusEl.textContent = "Your turn. Select any White piece to preview legal moves.";
+    } else {
+      statusEl.textContent = "Bot responded. Analyze board position and execute your move.";
+    }
   }
 }
 
 function resetBoard() {
+  gameState = {
+    board: { ...INITIAL_CHESS_BOARD },
+    turn: 'w',
+    selectedSquare: null,
+    validMoves: [],
+    history: [],
+    isThinking: false
+  };
   renderChessBoard();
-  const statusEl = document.getElementById("chess-status");
-  if (statusEl) {
-    statusEl.textContent = "Click any active piece to inspect strategic move calculation.";
-  }
-  showToast("Board position reset.");
+  showToast("Board reset to symmetrical starting position. White to move!");
 }
 
 // Header elevation on scroll
